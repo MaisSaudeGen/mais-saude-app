@@ -46,7 +46,6 @@ public class Usuario  {
 	private String senha;
 	
 	private String foto;
-	private String post;
 	
 	
 	@OneToMany (fetch = FetchType.LAZY, mappedBy =  "usuario", cascade = CascadeType.REMOVE) 
@@ -111,16 +110,7 @@ public class Usuario  {
 
 	public void setFoto(String foto) {
 		this.foto = foto;
-	}
-
-
-	public String getPost() {
-		return post;
-	}
-
-
-	public void setPost(String post) {
-		this.post = post;
+	
 	}
 
 
