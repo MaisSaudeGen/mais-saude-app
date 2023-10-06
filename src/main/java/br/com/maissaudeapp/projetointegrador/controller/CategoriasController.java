@@ -3,6 +3,7 @@ package br.com.maissaudeapp.projetointegrador.controller;
 import java.util.List;
 import java.util.Optional;
 
+import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -50,17 +51,18 @@ public class CategoriasController {
 	}
 	
 	@PostMapping
+	@Transactional
 	public ResponseEntity<@Valid Categorias> post(@Valid @RequestBody Categorias categorias){
-		
 		return ResponseEntity.status(HttpStatus.CREATED)
 				.body(categoriasRepository.save(categorias));
 		
 	}
 	
 	@PutMapping
+	@Transactional
 	public ResponseEntity<Categorias> put(@Valid @RequestBody Categorias categorias){
 		return categoriasRepository.findById(categorias.getId())
-				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED)
+				.map(resposta -> ResponseEntity.status(HttpStatus.OK)
 						.body(categoriasRepository.save(categorias)))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 		
@@ -68,6 +70,7 @@ public class CategoriasController {
 	
 	@ResponseStatus(HttpStatus.NO_CONTENT)
 	@DeleteMapping("/{id}")
+	@Transactional
 	public void delete(@PathVariable Long id) {
 		Optional<Categorias> categorias = categoriasRepository.findById(id);
 		if(categorias.isEmpty())
