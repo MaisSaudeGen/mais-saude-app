@@ -22,6 +22,7 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.server.ResponseStatusException;
 
+import br.com.maissaudeapp.projetointegrador.model.Categorias;
 import br.com.maissaudeapp.projetointegrador.model.Postagem;
 import br.com.maissaudeapp.projetointegrador.repository.CategoriasRepository;
 import br.com.maissaudeapp.projetointegrador.repository.PostagemRepository;
@@ -44,6 +45,13 @@ public class PostagemController {
 	public ResponseEntity<List<Postagem>> getAll(){
 		return ResponseEntity.ok(repository.findAll());
 	}
+	@GetMapping("/{id}")
+	public ResponseEntity<Postagem> getById(@PathVariable Long id){
+		return repository.findById(id)
+				.map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+	
 	@PostMapping 
 	@Transactional
 	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem){
