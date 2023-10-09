@@ -39,7 +39,7 @@ public class Postagem {
     private BigInteger likes;
     private BigInteger compartilhamentos;
     private String comentarios;
-
+    
     @ManyToOne
     @JsonIgnoreProperties("postagem")
     private Categorias categorias;
@@ -47,6 +47,32 @@ public class Postagem {
     @ManyToOne
     @JsonIgnoreProperties("usuario")
     private Usuario usuario;
+
+    public String getTexto() {
+		return texto;
+	}
+
+	public void setTexto(String texto) {
+		this.texto = texto;
+	}
+
+	public Categorias getCategorias() {
+		return categorias;
+	}
+
+	public void setCategorias(Categorias categorias) {
+		this.categorias = categorias;
+	}
+
+	public Usuario getUsuario() {
+		return usuario;
+	}
+
+	public void setUsuario(Usuario usuario) {
+		this.usuario = usuario;
+	}
+
+	
 
     public Long getId() {
         return id;

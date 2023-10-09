@@ -1,5 +1,90 @@
 package br.com.maissaudeapp.projetointegrador.controller;
 
-public class PostagemController {
+import java.util.List;
+import java.util.Optional;
 
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.HttpStatusCode;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.CrossOrigin;
+import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.server.ResponseStatusException;
+
+import br.com.maissaudeapp.projetointegrador.model.Categorias;
+import br.com.maissaudeapp.projetointegrador.model.Postagem;
+import br.com.maissaudeapp.projetointegrador.repository.CategoriasRepository;
+import br.com.maissaudeapp.projetointegrador.repository.PostagemRepository;
+import jakarta.transaction.Transactional;
+import jakarta.validation.Valid;
+
+@RestController
+@RequestMapping("/postagem")
+@CrossOrigin(origins = "*", allowedHeaders = "*")
+public class PostagemController {
+	@Autowired
+	private PostagemRepository repository;
+	
+	@Autowired 
+	private CategoriasRepository categoriaRepository;
+	
+	
+	
+	@GetMapping 
+	public ResponseEntity<List<Postagem>> getAll(){
+		return ResponseEntity.ok(repository.findAll());
+	}
+	@GetMapping("/{id}")
+	public ResponseEntity<Postagem> getById(@PathVariable Long id){
+		return repository.findById(id)
+				.map(resposta -> ResponseEntity.ok(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
+	}
+	
+	@PostMapping 
+	@Transactional
+	public ResponseEntity<Postagem> post(@Valid @RequestBody Postagem postagem){
+        if (categoriaRepository.existsById(postagem.getCategorias().getId()))
+            return ResponseEntity.status(HttpStatus.CREATED)
+                    .body(repository.save(postagem));
+        
+        throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
+	}
+	@PutMapping
+	public ResponseEntity<Postagem> put (@Valid @RequestBody Postagem postagem){
+		if (repository.existsById(postagem.getId())) {
+			
+			if(categoriaRepository.existsById(postagem.getCategorias().getId()))
+		return ResponseEntity.status(HttpStatus.OK)
+				.body(repository.save(postagem));
+			
+			throw new ResponseStatusException(HttpStatus.BAD_REQUEST, "Categoria não existe!", null);
+				}
+		
+				return ResponseEntity.status(HttpStatus.NOT_FOUND).build();
+	}
+	@ResponseStatus(HttpStatus.NO_CONTENT) 
+	@DeleteMapping("/{id}")
+
+	public void delete (@PathVariable Long id) { Optional<Postagem> postagem = repository.findById(id);
+
+	if(postagem.isEmpty())
+
+	throw new ResponseStatusException (HttpStatus.NOT_FOUND);
+
+	repository.deleteById(id);
+
+	}
+	
 }
