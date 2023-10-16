@@ -11,8 +11,9 @@ package br.com.maissaudeapp.projetointegrador.security;
 	import org.springframework.stereotype.Service;
 	import org.springframework.web.server.ResponseStatusException;
 
-	import com.generation.blogpessoal.model.Usuario;
-	import com.generation.blogpessoal.repository.UsuarioRepository;
+import br.com.maissaudeapp.projetointegrador.model.Usuario;
+import br.com.maissaudeapp.projetointegrador.repository.UsuarioRepository;
+
 
 	@Service
 	public class UserDetailsServiceImpl implements UserDetailsService {
