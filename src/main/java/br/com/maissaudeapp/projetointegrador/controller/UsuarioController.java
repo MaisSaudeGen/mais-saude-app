@@ -20,37 +20,49 @@ import org.springframework.web.server.ResponseStatusException;
 
 import br.com.maissaudeapp.projetointegrador.model.Categorias;
 import br.com.maissaudeapp.projetointegrador.model.Usuario;
+import br.com.maissaudeapp.projetointegrador.model.UsuarioLogin;
 import br.com.maissaudeapp.projetointegrador.repository.UsuarioRepository;
+import br.com.maissaudeapp.projetointegrador.service.UsuarioService;
 import jakarta.transaction.Transactional;
 import jakarta.validation.Valid;
 
 @RestController
-@RequestMapping("/usuario")
+@RequestMapping("/usuarios")
 @CrossOrigin(origins = "*", allowedHeaders = "*")
 public class UsuarioController {
 
 	@Autowired
 	private UsuarioRepository repository;
 
+	@Autowired
+	private UsuarioService usuarioService;
 
 	@GetMapping
 	public ResponseEntity<List<Usuario>> getAll() {
 		return ResponseEntity.ok(repository.findAll());
 	}
-	
+
 	@GetMapping("/{id}")
-	public ResponseEntity<Usuario> getById(@PathVariable Long id){
-		return repository.findById(id)
-				.map(resposta -> ResponseEntity.ok(resposta))
+	public ResponseEntity<Usuario> getById(@PathVariable Long id) {
+		return repository.findById(id).map(resposta -> ResponseEntity.ok(resposta))
 				.orElse(ResponseEntity.status(HttpStatus.NOT_FOUND).build());
 	}
 
-	@PostMapping
-	@Transactional
+	@PostMapping("/cadastrar")
 	public ResponseEntity<Usuario> post(@Valid @RequestBody Usuario usuario) {
-		return ResponseEntity.status(HttpStatus.CREATED).body(repository.save(usuario));
+		return usuarioService.cadastrarUsuario(usuario)
+				.map(resposta -> ResponseEntity.status(HttpStatus.CREATED).body(resposta))
+				.orElse(ResponseEntity.status(HttpStatus.BAD_REQUEST).build());
 
 	}
+	
+	@PostMapping("/logar")
+    public ResponseEntity<UsuarioLogin> autenticarUsuario(@RequestBody Optional<UsuarioLogin> usuarioLogin){
+        
+        return usuarioService.autenticarUsuario(usuarioLogin)
+                .map(resposta -> ResponseEntity.status(HttpStatus.OK).body(resposta))
+                .orElse(ResponseEntity.status(HttpStatus.UNAUTHORIZED).build());
+    }
 
 	@PutMapping
 	public ResponseEntity<Usuario> put(@Valid @RequestBody Usuario usuario) {

@@ -27,7 +27,9 @@ public class Usuario  {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long id;
 	
-	
+	@Column(unique = true)
+	@NotBlank(message = "O atributo usuario é obrigatório!")
+    @Size(min = 3, max=35, message = "O atributo usuario deve conter no minimo 3 e no máximo 35 caracteres")
 	private String usuario;
 	
 	@Column(unique = true)
@@ -36,13 +38,12 @@ public class Usuario  {
 	private String nome;
 	
 	@Column(unique = true)
-	@NotBlank(message = "O atributo E-mail é obrigatório!")
     @Size(min = 10, max=35, message = "O atributo E-mail deve conter no minimo 3 e no máximo 35 caracteres")
 	private String email;
 	
 	@Column(unique = true)
 	@NotBlank(message = "O atributo Senha é obrigatório!")
-    @Size(min = 10, message = "O atributo Senha deve conter no minimo 3 caracteres")
+    @Size(min = 6, message = "O atributo Senha deve conter no minimo 6 caracteres")
 	private String senha;
 	
 	private String foto;
