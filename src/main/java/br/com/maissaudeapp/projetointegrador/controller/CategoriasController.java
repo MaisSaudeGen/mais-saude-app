@@ -31,7 +31,7 @@ public class CategoriasController {
 	@Autowired
 	private CategoriasRepository categoriasRepository;
 	
-	@GetMapping
+	@GetMapping("/all")
 	public ResponseEntity<List<Categorias>> getAll(){
 		return ResponseEntity.ok(categoriasRepository.findAll());
 	}
@@ -50,7 +50,7 @@ public class CategoriasController {
 		
 	}
 	
-	@PostMapping
+	@PostMapping("/cadastrar")
 	@Transactional
 	public ResponseEntity<@Valid Categorias> post(@Valid @RequestBody Categorias categorias){
 		return ResponseEntity.status(HttpStatus.CREATED)
@@ -58,7 +58,7 @@ public class CategoriasController {
 		
 	}
 	
-	@PutMapping
+	@PutMapping("/atualizar")
 	@Transactional
 	public ResponseEntity<Categorias> put(@Valid @RequestBody Categorias categorias){
 		return categoriasRepository.findById(categorias.getId())
