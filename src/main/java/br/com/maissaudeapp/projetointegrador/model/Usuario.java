@@ -32,16 +32,15 @@ public class Usuario  {
     @Size(min = 3, max=35, message = "O atributo usuario deve conter no minimo 3 e no máximo 35 caracteres")
 	private String usuario;
 	
-	@Column(unique = true)
+	
 	@NotBlank(message = "O atributo nome é obrigatório!")
     @Size(min = 3, max=35, message = "O atributo nome deve conter no minimo 3 e no máximo 35 caracteres")
 	private String nome;
 	
-	@Column(unique = true)
-    @Size(min = 10, max=35, message = "O atributo E-mail deve conter no minimo 3 e no máximo 35 caracteres")
+	
 	private String email;
 	
-	@Column(unique = true)
+	
 	@NotBlank(message = "O atributo Senha é obrigatório!")
     @Size(min = 6, message = "O atributo Senha deve conter no minimo 6 caracteres")
 	private String senha;
